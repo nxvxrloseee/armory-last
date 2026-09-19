@@ -27,7 +27,6 @@ class ManufacturerQuery {
       search: search ?? this.search,
       sortField: sortField ?? this.sortField,
       sortAscending: sortAscending ?? this.sortAscending,
-      // Любое изменение условий отбора возвращает на первую страницу.
       page: page ?? 1,
       size: size ?? this.size,
       includeDeleted: includeDeleted ?? this.includeDeleted,

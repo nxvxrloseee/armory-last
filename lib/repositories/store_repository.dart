@@ -6,11 +6,8 @@ abstract interface class StoreRepository
     implements ListRepository<Store, StoreQuery> {
   Future<Store?> findById(String id);
 
-  /// Полный список действующих магазинов — нужен выбору точки выдачи при
-  /// оформлении заказа.
   Future<List<Store>> listAll();
 
-  /// [draft.id] игнорируется — идентификатор назначает репозиторий.
   Future<Store> create(Store draft);
   Future<Store> update(Store store);
 

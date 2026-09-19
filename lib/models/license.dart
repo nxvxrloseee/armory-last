@@ -1,11 +1,8 @@
-/// Разрешение на приобретение оружия — 1:1 с [Client] (см.
-/// armory_last/pocketbase/README.md). Новая сущность курсового проекта:
-/// в ПР1-6 её атрибуты были полями внутри Client, здесь — своя запись.
 class License {
   final String id;
   final String clientId;
   final String number;
-  final String type; // rifle | shotgun | pistol | other
+  final String type;
   final DateTime issuedAt;
   final DateTime expiresAt;
 

@@ -15,9 +15,5 @@ class PageResult<T> {
   bool get hasPrevious => page > 1;
   bool get hasNext => page < totalPages;
 
-  /// Пустая страница — начальное значение для состояния экрана.
-  ///
-  /// Конструктор намеренно не const: пустой константный список с параметром
-  /// типа `T` в Dart запрещён, поэтому пишется обычный `<T>[]`.
   PageResult.empty() : items = <T>[], page = 1, size = 10, total = 0;
 }

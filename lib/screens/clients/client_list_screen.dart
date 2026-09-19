@@ -75,10 +75,6 @@ class _ClientListScreenState extends State<ClientListScreen> {
       appBar: AppBar(
         title: const Text('Покупатели'),
         leading: BackButton(onPressed: () => context.go('/')),
-        // Без кнопки "добавить": в отличие от ПР1-6 запись Client теперь
-        // неразрывно связана с аккаунтом users (1:1) — появляется только
-        // через самостоятельную регистрацию (см. AuthNotifier.register),
-        // продавец покупателей отсюда не заводит, только редактирует.
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

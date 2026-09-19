@@ -97,8 +97,6 @@ class ArmoryApp extends StatelessWidget {
           update: (_, pb, _) => PbOrderRepository(pb),
         ),
         ProxyProvider<PocketBase, AdminApi>(update: (_, pb, _) => AdminApi(pb)),
-        // Один обобщённый нотифаер на все сущности (см.
-        // state/list_notifier.dart) вместо отдельного класса на каждую.
         ChangeNotifierProvider(
           create: (context) => ListNotifier<Weapon, WeaponQuery>(
             context.read<WeaponRepository>(),
@@ -150,8 +148,6 @@ class ArmoryApp extends StatelessWidget {
             scaffoldMessengerKey: scaffoldMessengerKey,
             builder: (context, child) => Consumer<AuthNotifier>(
               builder: (context, auth, _) => InactivityWatcher(
-                // ПР5, оценка «5»: 3 минуты без действий — выход,
-                // предупреждение за 30 секунд до этого.
                 timeout: const Duration(minutes: 3),
                 warnBefore: const Duration(seconds: 30),
                 enabled: auth.isAuthenticated,

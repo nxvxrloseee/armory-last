@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../state/load_status.dart';
 
-/// Единая обёртка для четырёх состояний асинхронного списка: загрузка,
-/// ошибка, успех с пустым результатом и успех с данными. Пустой список и
-/// ошибка нарочно выглядят по-разному, чтобы их нельзя было спутать.
 class StatusView extends StatelessWidget {
   const StatusView({
     super.key,

@@ -1,6 +1,3 @@
-/// [licenseType] — новое поле относительно ПР1-6: категория оружия несёт
-/// тип требуемой лицензии (rifle/shotgun/pistol/other), это то, на чём
-/// строится доменное правило заказа (см. armory_last/pocketbase/README.md).
 class Category {
   final String id;
   final String name;

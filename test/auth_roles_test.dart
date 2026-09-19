@@ -4,8 +4,6 @@ import 'package:armory_last/models/role.dart';
 
 import 'support/fake_auth.dart';
 
-/// ПР5, оценка «5»: «тесты на логику разграничения прав — не менее пяти
-/// проверок соответствия роли и доступности операции».
 void main() {
   group('Role — иерархия уровней', () {
     test('buyer < seller < admin', () {
@@ -19,9 +17,6 @@ void main() {
     });
 
     test('fromWire откатывается на buyer для неизвестного значения', () {
-      // Сервер — источник истины по ролям; если когда-нибудь пришлют
-      // значение, которого клиент не знает, показывать нужно наименьшие
-      // права, а не падать и не молча выдавать что-то более привилегированное.
       expect(Role.fromWire('unknown-role'), Role.buyer);
     });
   });
@@ -52,7 +47,7 @@ void main() {
     });
 
     test('незалогиненный пользователь не имеет прав ни одной роли', () async {
-      final auth = await loggedOut(); // login() ни разу не вызван
+      final auth = await loggedOut();
       expect(auth.has(Role.buyer), isFalse);
       expect(auth.has(Role.seller), isFalse);
       expect(auth.has(Role.admin), isFalse);

@@ -10,10 +10,6 @@ void main() {
   testWidgets('приложение запускается и показывает главный экран', (
     tester,
   ) async {
-    // AuthNotifier до restore() ещё "восстанавливается" (isRestoring == true),
-    // поэтому redirect() в router.dart ничего не решает и пропускает прямо
-    // на '/', как и без входа — сетевых запросов при этом не происходит,
-    // поэтому PocketBase-клиенту не нужен подменённый транспорт.
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
     final pb = PocketBase('http://test.local');

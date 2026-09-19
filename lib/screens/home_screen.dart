@@ -14,9 +14,6 @@ class HomeScreen extends StatelessWidget {
     final user = auth.user;
     final isStaff = auth.has(Role.seller);
     final isAdmin = auth.has(Role.admin);
-    // ПР6, раздел 1.2: заголовок + "ФИО · роль" + кнопка выхода вместе не
-    // помещались в AppBar на 360px (RenderFlex overflow) — на узком окне
-    // имя/роль просто не показываем, только заголовок покороче и выход.
     final isNarrow = MediaQuery.sizeOf(context).width < 600;
 
     return Scaffold(
@@ -72,8 +69,6 @@ class HomeScreen extends StatelessWidget {
                 label: 'Магазины',
                 onTap: () => context.go('/stores'),
               ),
-              // Список всех покупателей — персональные данные, доступны
-              // только сотрудникам магазина (продавец/администратор).
               if (isStaff)
                 _NavCard(
                   icon: Icons.people_outline,

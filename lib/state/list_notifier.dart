@@ -4,12 +4,6 @@ import '../models/page_result.dart';
 import '../repositories/list_repository.dart';
 import 'load_status.dart';
 
-/// Состояние списочного экрана (условия отбора, страница результатов,
-/// статус загрузки, выделение строк) одинаково устроено для всех пяти
-/// сущностей — единственное, что меняется, это конкретные [T]/[Q] и
-/// стартовое значение запроса. Раньше это было пять почти идентичных
-/// классов (WeaponListNotifier, ManufacturerListNotifier, ...); теперь один
-/// обобщённый, а разница сведена к типовым параметрам и [initialQuery].
 class ListNotifier<T, Q> extends ChangeNotifier {
   ListNotifier(this._repository, this.initialQuery) : _query = initialQuery;
 
@@ -45,7 +39,7 @@ class ListNotifier<T, Q> extends ChangeNotifier {
 
   Future<void> applyQuery(Q next) async {
     _query = next;
-    _selected.clear(); // выделение теряет смысл при смене условий отбора
+    _selected.clear();
     await load();
   }
 

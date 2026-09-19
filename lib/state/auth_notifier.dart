@@ -9,26 +9,10 @@ import '../models/app_user.dart';
 import '../models/register_input.dart';
 import '../models/role.dart';
 
-/// Состояние входа на всё приложение. Токен персистится PocketBase-ом самим
-/// (см. core/pb_client.dart) — здесь только профиль пользователя и общая
-/// длительность сессии (ПР5, оценка «5»), которых у токена самого по себе
-/// нет.
-///
-/// Профиль (в т.ч. роль) кэшируется в `auth_cached_user`, и после входа
-/// именно этот кэш красит интерфейс — сервер на восстановлении сессии
-/// запрашивается только чтобы убедиться, что токен ещё жив
-/// ([PocketBase.collection('users').authRefresh]), его ответ роль в кэше не
-/// перезаписывает. Это НАМЕРЕННО уязвимое для подмены место (тот же приём,
-/// что в ПР5, и тот же вопрос есть в билете защиты итогового проекта:
-/// "откройте DevTools и подмените сохранённые данные..."). Реальная защита
-/// живёт только на сервере: `listRule`/`createRule`/... каждой коллекции
-/// проверяют настоящую роль из токена, а не то, что показывает интерфейс.
 class AuthNotifier extends ChangeNotifier {
   static const _kSessionStarted = 'auth_session_started';
   static const _kCachedUser = 'auth_cached_user';
 
-  /// Общая длительность сессии — независимо от активности, по истечении
-  /// этого времени от входа пользователь выходит.
   static const sessionMaxAge = Duration(hours: 8);
 
   AuthNotifier(this._prefs, this.pb);
@@ -47,8 +31,6 @@ class AuthNotifier extends ChangeNotifier {
   bool get isAuthenticated => _user != null;
   bool get isRestoring => _restoring;
 
-  /// Причина последнего автоматического выхода — экран входа показывает её
-  /// один раз и сбрасывает через [consumeLogoutReason].
   String? get lastLogoutReason => _lastLogoutReason;
 
   String? consumeLogoutReason() {
@@ -61,8 +43,6 @@ class AuthNotifier extends ChangeNotifier {
 
   DateTime? get sessionExpiresAt => _sessionStarted?.add(sessionMaxAge);
 
-  /// Восстановление сессии при запуске приложения — вызывается один раз до
-  /// построения дерева виджетов (см. main.dart).
   Future<void> restore() async {
     _restoring = true;
     final startedRaw = _prefs.getString(_kSessionStarted);
@@ -82,8 +62,6 @@ class AuthNotifier extends ChangeNotifier {
       return;
     }
 
-    // Красим интерфейс сразу по кэшу, не дожидаясь сети — и именно этот
-    // кэш, не ответ сервера, остаётся источником роли для UI (см. class-doc).
     final cachedRaw = _prefs.getString(_kCachedUser);
     if (cachedRaw != null) {
       try {
@@ -93,8 +71,6 @@ class AuthNotifier extends ChangeNotifier {
       }
     }
     try {
-      // Только проверка + обновление токена; результат (в т.ч. актуальную
-      // роль) сознательно игнорируем — см. class-doc.
       await pb.collection('users').authRefresh();
       _restoreError = null;
     } on ClientException catch (e) {
@@ -102,9 +78,6 @@ class AuthNotifier extends ChangeNotifier {
       if (mapped is UnauthorizedException) {
         await logout(reason: 'Сессия истекла, войдите снова.');
       } else {
-        // Сервер недоступен: сессию не сбрасываем, покажем ошибку на экране
-        // входа, но токен остаётся — при следующей успешной проверке всё
-        // восстановится само, без повторного ввода пароля.
         _restoreError = 'Не удалось проверить сессию: сервер недоступен.';
       }
     }
@@ -138,9 +111,6 @@ class AuthNotifier extends ChangeNotifier {
     final auth = await pb
         .collection('users')
         .authWithPassword(input.email, input.password);
-    // Клиентский профиль создаётся отдельным запросом сразу после первого
-    // входа — сущность `clients` не может быть создана до того, как
-    // существует связанный `users`-аккаунт (relation обязателен).
     await pb.collection('clients').create(
       body: {'user': auth.record.id, 'phone': input.phone},
     );
@@ -156,7 +126,7 @@ class AuthNotifier extends ChangeNotifier {
             .getFirstListItem('user="${record.id}"');
         clientId = client.id;
       } on ClientException {
-        clientId = null; // регистрация не успела создать клиента — не должно
+        clientId = null;
       }
     }
     _user = AppUser(
@@ -175,9 +145,6 @@ class AuthNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Молча обновляет токен — используется интерсептором репозиториев при
-  /// 401 на "боевом" запросе, чтобы исходный запрос можно было повторить
-  /// прозрачно для пользователя (оценка «5»: автообновление токена).
   Future<void> refreshTokens() => guard(
     () => pb.collection('users').authRefresh(),
   );

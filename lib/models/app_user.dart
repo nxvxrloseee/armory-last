@@ -19,7 +19,6 @@ class AppUser {
   final Role role;
   final String? clientId;
 
-  /// «Фамилия Имя Отчество» одной строкой — для отображения, не хранится.
   String get fullName => [
     lastName,
     firstName,

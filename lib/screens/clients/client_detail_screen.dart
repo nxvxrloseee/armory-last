@@ -218,10 +218,6 @@ class _ClientDetailScreenState extends State<ClientDetailScreen> {
   }
 }
 
-/// Диалог выпуска/изменения лицензии — своя форма (создание+редактирование
-/// одной сущности), но без отдельного роута: License всегда открывается в
-/// контексте конкретного покупателя, самостоятельного смысла список лицензий
-/// не имеет.
 class _LicenseDialog extends StatefulWidget {
   const _LicenseDialog({required this.clientId, this.existing});
 

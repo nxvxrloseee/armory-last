@@ -9,10 +9,6 @@ import 'package:armory_last/state/auth_notifier.dart';
 
 const _jsonHeaders = {'content-type': 'application/json'};
 
-/// Собирает синтаксически валидный (но не подписанный настоящим секретом)
-/// JWT: [AuthStore.isValid] сам декодирует payload и сверяет `exp`, поэтому
-/// тестовому токену достаточно быть трёхчастным base64url и иметь future-`exp`
-/// — подпись PocketBase на клиенте не проверяет.
 String fakeJwt() {
   String b64(Map<String, dynamic> data) =>
       base64Url.encode(utf8.encode(jsonEncode(data))).replaceAll('=', '');
@@ -23,11 +19,6 @@ String fakeJwt() {
   return '$header.$payload.fake-signature';
 }
 
-/// Тот же приём, что раньше подменял транспорт Dio: здесь подменяется
-/// [PocketBase]-клиента `httpClientFactory`, поэтому проверяется настоящий
-/// код [AuthNotifier], а не заглушка поверх него. `/auth-with-password`
-/// отвечает нужной ролью, `/collections/clients/records` — единственной
-/// тестовой записью клиента (нужна [AuthNotifier._applySession] для buyer).
 Future<AuthNotifier> loggedInAs(String role) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
@@ -76,8 +67,6 @@ Future<AuthNotifier> loggedInAs(String role) async {
   return auth;
 }
 
-/// [PocketBase] без единого залогиненного пользователя — для проверки
-/// поведения "гость не имеет прав ни одной роли".
 Future<AuthNotifier> loggedOut() async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();

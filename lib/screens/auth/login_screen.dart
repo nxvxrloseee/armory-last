@@ -9,8 +9,6 @@ import '../../utils/validators.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, this.from});
 
-  /// Адрес, с которого пользователя перенаправили на вход — после успешного
-  /// входа он должен попасть именно туда, а не на главную (ПР5, оценка «4»).
   final String? from;
 
   @override
@@ -28,9 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // Один раз показать, почему сессия завершилась (неактивность, истёк
-    // общий лимит сессии, не удалось обновить токен) — задание ПР5, раздел
-    // "Что сдать": "сообщение о завершении сессии".
     _logoutReason = context.read<AuthNotifier>().consumeLogoutReason();
   }
 

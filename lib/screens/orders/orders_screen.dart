@@ -14,10 +14,6 @@ String _formatDate(DateTime d) =>
     '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year} '
     '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
 
-/// Один экран на обе стороны сделки: покупатель видит только свои заказы
-/// (сервер сам так фильтрует — см. armory_api/internal/orders.clientIDOf),
-/// продавец/администратор — все и умеют их выдавать. Разница — это разница
-/// в доступных действиях и одной колонке, а не два отдельных экрана.
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
 

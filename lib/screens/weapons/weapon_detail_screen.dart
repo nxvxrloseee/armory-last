@@ -41,8 +41,6 @@ class _WeaponDetailScreenState extends State<WeaponDetailScreen> {
 
   Future<void> _load() async {
     setState(() => _loading = true);
-    // Ссылки на репозитории берём до await: обращаться к context после
-    // асинхронного разрыва небезопасно, если виджет успеет размонтироваться.
     final weaponRepository = context.read<WeaponRepository>();
     final manufacturerRepository = context.read<ManufacturerRepository>();
     final categoryRepository = context.read<CategoryRepository>();
@@ -156,9 +154,6 @@ class _WeaponDetailScreenState extends State<WeaponDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final w = _weapon;
-    // Кнопка редактирования недоступна покупателю не потому, что её кто-то
-    // спрятал специально ради защиты — это то же самое "уборка интерфейса",
-    // что и ниже: реальный запрет живёт на сервере (RequireRole(RoleSeller)).
     final auth = context.watch<AuthNotifier>();
     final isStaff = auth.has(Role.seller);
     final isAdmin = auth.has(Role.admin);

@@ -1,11 +1,5 @@
-/// Валидатор одного текстового поля формы — сигнатура, которую ожидает
-/// [TextFormField.validator]/[FormField.validator].
 typedef FieldValidator = String? Function(String? value);
 
-/// Переиспользуемые проверки полей форм. Собраны в одном месте, как того
-/// требует задание (раздел 4, оценка «3»: «Валидаторы вынесены в отдельный
-/// файл и переиспользуются между формами») — вместо копирования одной и той
-/// же логики в каждый экран формы.
 class Validators {
   Validators._();
 
@@ -36,13 +30,12 @@ class Validators {
   static FieldValidator email({String message = 'Некорректный формат почты'}) {
     return (value) {
       if (value == null || value.trim().isEmpty) {
-        return null; // required проверяется отдельно
+        return null;
       }
       return _emailPattern.hasMatch(value.trim()) ? null : message;
     };
   }
 
-  /// Диапазон для целого числа, введённого в текстовое поле.
   static FieldValidator intRange({
     int? min,
     int? max,
@@ -57,7 +50,6 @@ class Validators {
     };
   }
 
-  /// Положительность для количеств (цена, остаток на складе и т.п.).
   static FieldValidator positiveInt({
     String message = 'Введите положительное число',
   }) {
@@ -67,8 +59,6 @@ class Validators {
     };
   }
 
-  /// Склеивает несколько валидаторов в один: возвращается первое найденное
-  /// сообщение об ошибке.
   static FieldValidator combine(List<FieldValidator> validators) {
     return (value) {
       for (final validator in validators) {
@@ -79,10 +69,6 @@ class Validators {
     };
   }
 
-  /// Зеркалит серверную проверку (armory_api/internal/auth/password.go,
-  /// ValidatePasswordStrength) — задание ПР5 требует проверку по мере
-  /// ввода, а не только при отправке формы, поэтому она нужна и здесь, а
-  /// не только на сервере.
   static FieldValidator password() {
     return (value) {
       final v = value ?? '';
@@ -97,8 +83,6 @@ class Validators {
     };
   }
 
-  /// Для множественного выбора (`FormField<List<String>>`, см. приложение Б,
-  /// раздел 4) — хотя бы один элемент должен быть выбран.
   static String? nonEmptySelection(
     List<String>? value, [
     String message = 'Выберите хотя бы одно значение',

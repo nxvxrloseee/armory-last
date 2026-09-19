@@ -24,9 +24,6 @@ Weapon _fromRecord(RecordModel r) => Weapon(
       : null,
 );
 
-/// Третья по счёту реализация [WeaponRepository] (см. класс-doc в самом
-/// интерфейсе): сначала данные в памяти, потом собственный Go-сервер
-/// (ПР4/5/6), теперь PocketBase — экраны и интерфейс не изменились.
 class PbWeaponRepository implements WeaponRepository {
   PbWeaponRepository(this._pb);
   final PocketBase _pb;
@@ -95,9 +92,6 @@ class PbWeaponRepository implements WeaponRepository {
     'stock_available': w.stockAvailable,
   };
 
-  /// Ошибка уникальности артикула приходит как [ValidationException] с
-  /// полем `sku` — здесь она превращается в тот же [UniqueConstraintException],
-  /// который ловит weapon_form_screen.dart, чтобы форма не менялась.
   Future<T> _rethrowSkuConflict<T>(Future<T> Function() action) async {
     try {
       return await action();
@@ -134,10 +128,6 @@ class PbWeaponRepository implements WeaponRepository {
     ),
   );
 
-  /// Бросает [ReferentialIntegrityException], если это оружие ещё
-  /// фигурирует в заказах — PocketBase проверяет это сам
-  /// (`cascadeDelete: false` на relation-полях orders), число ссылающихся
-  /// записей при этом не присылает (платформенное ограничение, count = 0).
   Future<T> _rethrowConflict<T>(Future<T> Function() action) async {
     try {
       return await action();

@@ -17,9 +17,6 @@ Designer _fromRecord(RecordModel r) => Designer(
       : null,
 );
 
-/// Query-модель говорит на языке приложения (fullName/activeSince), схема
-/// PocketBase — на языке своих колонок (full_name/active_since); эта
-/// таблица — единственное место, которое их сводит.
 const _sortFieldMap = {'fullName': 'full_name', 'activeSince': 'active_since'};
 
 class PbDesignerRepository implements DesignerRepository {

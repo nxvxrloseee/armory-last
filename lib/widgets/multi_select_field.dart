@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Реализация связи «многие ко многим» в интерфейсе: набор [FilterChip] в
-/// [FormField]&lt;List&lt;int&gt;&gt;, как описано в приложении Б (раздел 3.3) —
-/// готового виджета множественного выбора в Material нет. Один и тот же
-/// виджет переиспользуется для категорий и конструкторов оружия.
 class MultiSelectField extends StatelessWidget {
   const MultiSelectField({
     super.key,
@@ -16,8 +12,6 @@ class MultiSelectField extends StatelessWidget {
 
   final String label;
 
-  /// Пары (id, отображаемое имя) — обычно из `repository.listAll()`, а не
-  /// из констант в коде.
   final List<(String, String)> options;
   final List<String> initialValue;
   final ValueChanged<List<String>> onChanged;
@@ -34,7 +28,7 @@ class MultiSelectField extends StatelessWidget {
             labelText: label,
             border: const OutlineInputBorder(),
             errorText: field
-                .errorText, // ошибка показывается так же, как у обычного поля
+                .errorText,
           ),
           child: options.isEmpty
               ? const Padding(
@@ -56,7 +50,7 @@ class MultiSelectField extends StatelessWidget {
                       onSelected: (_) {
                         final next = [...field.value!];
                         selected ? next.remove(id) : next.add(id);
-                        field.didChange(next); // сообщаем форме об изменении
+                        field.didChange(next);
                         onChanged(next);
                       },
                     );

@@ -8,11 +8,6 @@ import '../../state/auth_notifier.dart';
 import '../../utils/validators.dart';
 import '../../widgets/entity_form_scaffold.dart';
 
-/// Регистрация доступна только для роли "покупатель" — публичная форма
-/// всегда создаёт role='buyer' (см. armory_last/pocketbase/README.md,
-/// `users.createRule`); продавца и администратора заводит только уже
-/// залогиненный админ. Лицензии на оружие тут нет — её выписывает продавец
-/// очно, после регистрации ([License] создаёт seller+, не сам покупатель).
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -102,8 +97,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             border: OutlineInputBorder(),
           ),
           validator: Validators.password(),
-          // Проверка по мере ввода, а не только по кнопке — задание ПР5,
-          // оценка «4». autovalidateMode делает то же самое декларативно.
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
         const SizedBox(height: 24),

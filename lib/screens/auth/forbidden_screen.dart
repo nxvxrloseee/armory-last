@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Экран отказа — редирект приводит сюда, а не роняет приложение и не
-/// показывает пустой экран, когда роль не подходит для маршрута (ПР5,
-/// оценка «4»). Это то же самое решение, что мгновенно вернёт сервер кодом
-/// 403, если кто-то доберётся до защищённого действия в обход интерфейса —
-/// см. п.17 задания.
 class ForbiddenScreen extends StatelessWidget {
   const ForbiddenScreen({super.key});
 

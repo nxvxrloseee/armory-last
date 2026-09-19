@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/debouncer.dart';
 
-/// Поле поиска, которое не запускает выборку на каждое нажатие клавиши, а
-/// ждёт паузы в наборе (300 мс) — иначе список перезапрашивался бы на каждый
-/// введённый символ.
 class DebouncedSearchField extends StatefulWidget {
   const DebouncedSearchField({
     super.key,
@@ -31,8 +28,6 @@ class _DebouncedSearchFieldState extends State<DebouncedSearchField> {
   @override
   void didUpdateWidget(covariant DebouncedSearchField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Внешнее изменение (например, кнопка «назад» браузера) обновляет поле,
-    // но только пока пользователь в него не печатает — иначе прыгал бы курсор.
     if (!_focusNode.hasFocus && widget.initialValue != _controller.text) {
       _controller.text = widget.initialValue;
     }

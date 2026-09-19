@@ -18,7 +18,7 @@ class Order {
   final String clientId;
   final String weaponId;
   final String storeId;
-  final String status; // ordered | picked_up | cancelled
+  final String status;
   final String? serialNumber;
   final DateTime createdAt;
   final DateTime? pickedUpAt;

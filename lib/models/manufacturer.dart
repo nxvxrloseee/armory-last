@@ -15,8 +15,6 @@ class Manufacturer {
 
   bool get isDeleted => deletedAt != null;
 
-  /// Без параметра [clearDeletedAt] нельзя отличить «не менять поле» от
-  /// «установить null»: оба случая выглядят как переданный null.
   Manufacturer copyWith({
     String? name,
     String? country,

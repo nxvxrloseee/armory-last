@@ -6,11 +6,6 @@ import '../models/client_query.dart';
 import '../models/page_result.dart';
 import 'client_repository.dart';
 
-/// ФИО/email не хранятся в `clients` — читаются из связанного `users` через
-/// `expand=user` (см. models/client.dart). Если разворот почему-то не
-/// пришёл (запись только что создана и ещё не проиндексирована), поля
-/// остаются пустыми, а не бросают исключение — список не должен падать
-/// из-за одной неполной записи.
 Client _fromRecord(RecordModel r) {
   final user = r.get<RecordModel?>('expand.user', null);
   return Client(

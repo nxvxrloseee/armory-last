@@ -15,8 +15,6 @@ import '../../utils/validators.dart';
 import '../../widgets/entity_form_scaffold.dart';
 import '../../widgets/multi_select_field.dart';
 
-/// Один экран на создание и на изменение (см. приложение Б, раздел 3.4):
-/// различие сводится к тому, передан ли [id].
 class WeaponFormScreen extends StatefulWidget {
   const WeaponFormScreen({super.key, this.id});
 
@@ -66,8 +64,6 @@ class _WeaponFormScreenState extends State<WeaponFormScreen> {
   }
 
   Future<void> _load() async {
-    // Ссылки на репозитории берём до await: обращаться к context после
-    // асинхронного разрыва небезопасно, если виджет успеет размонтироваться.
     final manufacturerRepository = context.read<ManufacturerRepository>();
     final categoryRepository = context.read<CategoryRepository>();
     final designerRepository = context.read<DesignerRepository>();
@@ -126,9 +122,6 @@ class _WeaponFormScreenState extends State<WeaponFormScreen> {
         await repository.create(draft);
       }
     } on UniqueConstraintException catch (e) {
-      // Ошибка уникальности выводится под самим полем «Артикул», а не общим
-      // сообщением, и не пробрасывается дальше — форма просто остаётся
-      // открытой с уже показанной ошибкой (задание, раздел 4, оценка «4»).
       setState(() => _skuServerError = e.message);
       return;
     }
@@ -182,12 +175,6 @@ class _WeaponFormScreenState extends State<WeaponFormScreen> {
           },
         ),
         const SizedBox(height: 16),
-        // Год и калибр — короткие поля; порознь на всю ширину формы (задание
-        // ПР6, раздел 1.2: "поле «год издания» не занимает полтора метра")
-        // они выглядят разрежённо даже при ограниченной 560px форме. Пара
-        // бок о бок — только когда есть место: LayoutBuilder, а не голый
-        // Row, — иначе на узком окне (360) два Expanded ужались бы до
-        // нечитаемой ширины вместо переноса вниз.
         LayoutBuilder(
           builder: (context, constraints) {
             final year = TextFormField(

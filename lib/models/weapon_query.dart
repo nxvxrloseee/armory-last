@@ -1,6 +1,3 @@
-/// Все условия отбора собраны в один неизменяемый объект — так их удобно
-/// передавать одним аргументом и целиком класть в query-параметры адреса,
-/// например: `/weapons?search=falcon&categoryId=abc123&sort=year,desc&page=3`.
 class WeaponQuery {
   final String search;
   final String? categoryId;
@@ -30,8 +27,6 @@ class WeaponQuery {
 
   static const _unset = Object();
 
-  /// Приём с сигнальной константой [_unset] позволяет отличить «параметр не
-  /// передан» (оставить как есть) от «передан null» (сбросить фильтр).
   WeaponQuery copyWith({
     String? search,
     Object? categoryId = _unset,
@@ -60,10 +55,6 @@ class WeaponQuery {
       yearTo: identical(yearTo, _unset) ? this.yearTo : yearTo as int?,
       sortField: sortField ?? this.sortField,
       sortAscending: sortAscending ?? this.sortAscending,
-      // Любое изменение условий отбора возвращает на первую страницу: иначе
-      // пользователь на седьмой странице после ввода поиска увидит пустой
-      // экран. Единственное место, которое осознанно передаёт page, —
-      // сама пагинация.
       page: page ?? 1,
       size: size ?? this.size,
       includeDeleted: includeDeleted ?? this.includeDeleted,

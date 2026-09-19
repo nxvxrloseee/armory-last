@@ -6,11 +6,8 @@ abstract interface class CategoryRepository
     implements ListRepository<Category, CategoryQuery> {
   Future<Category?> findById(String id);
 
-  /// Полный список действующих категорий — нужен фильтру и множественному
-  /// выбору категорий в форме оружия.
   Future<List<Category>> listAll();
 
-  /// [draft.id] игнорируется — идентификатор назначает репозиторий.
   Future<Category> create(Category draft);
   Future<Category> update(Category category);
 

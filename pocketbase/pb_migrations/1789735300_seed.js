@@ -1,8 +1,3 @@
-/// <reference path="../pb_data/types.d.ts" />
-
-// Тестовые данные для точки контроля 1 (развёрнутая схема с данными) и
-// для трёх ролевых учётных записей, которые сдаются вместе с проектом.
-
 migrate((app) => {
   const users = app.findCollectionByNameOrId("users");
   const manufacturers = app.findCollectionByNameOrId("manufacturers");
@@ -14,7 +9,6 @@ migrate((app) => {
   const licenses = app.findCollectionByNameOrId("licenses");
   const orders = app.findCollectionByNameOrId("orders");
 
-  // --- три тестовые учётные записи ---
   const buyerUser = new Record(users, {
     email: "pokupatel@armory.test",
     password: "Buyer123!",
@@ -44,13 +38,10 @@ migrate((app) => {
     emailVisibility: true,
     verified: true,
     role: "admin",
-    // Без отчества намеренно — поле patronymic необязательное (не у всех
-    // клиентов/сотрудников оно есть), тестовые данные это демонстрируют.
     last_name: "Системный", first_name: "Админ",
   });
   app.save(adminUser);
 
-  // --- справочники ---
   const manu1 = new Record(manufacturers, { name: "Ижмаш", country: "Россия", founded: 1807 });
   app.save(manu1);
   const manu2 = new Record(manufacturers, { name: "Kalashnikov Concern", country: "Россия", founded: 2013 });
@@ -77,7 +68,6 @@ migrate((app) => {
   const store2 = new Record(stores, { name: "Магазин на Советской", address: "г. Тверь, ул. Советская, 25" });
   app.save(store2);
 
-  // --- оружие (M:1 manufacturer, M:M categories/designers) ---
   const w1 = new Record(weapons, {
     name: "АК-74", sku: "AK74-001", manufacturer: manu2.id,
     categories: [catRifle.id], designers: [des1.id],
@@ -102,8 +92,6 @@ migrate((app) => {
   });
   app.save(w3);
 
-  // --- клиент (привязан к buyer-аккаунту) + лицензия (1:1) ---
-  // ФИО/email не дублируются — читаются через expand=user из buyerUser.
   const client1 = new Record(clients, {
     user: buyerUser.id, phone: "+7 900 000-00-00",
   });
@@ -116,7 +104,6 @@ migrate((app) => {
   });
   app.save(license1);
 
-  // --- демонстрационный заказ ---
   const order1 = new Record(orders, {
     client: client1.id, weapon: w1.id, store: store1.id, status: "ordered",
   });

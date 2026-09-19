@@ -27,12 +27,6 @@ class AdminUserRow {
   );
 }
 
-/// Единственный экран, недоступный никому, кроме администратора — сервер
-/// сам это перепроверяет (`users.listRule`/`updateRule` в
-/// armory_last/pocketbase/pb_migrations), эта обёртка только даёт клиенту
-/// типизированный доступ. Статистика считается на клиенте отдельными
-/// запросами `getList(perPage: 1)` — PocketBase отдаёт `totalItems` в
-/// первой же странице, полный список тянуть не нужно.
 class AdminApi {
   AdminApi(this._pb);
   final PocketBase _pb;

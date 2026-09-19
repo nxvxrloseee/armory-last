@@ -29,8 +29,6 @@ class Weapon {
 
   bool get isDeleted => deletedAt != null;
 
-  /// Без параметра [clearDeletedAt] нельзя отличить «не менять поле» от
-  /// «установить null»: оба случая выглядят как переданный null.
   Weapon copyWith({
     String? name,
     String? sku,
@@ -76,7 +74,6 @@ class Weapon {
     'deletedAt': deletedAt?.toIso8601String(),
   };
 
-  /// Устойчиво к отсутствующим/`null`/чужим по типу полям.
   factory Weapon.fromJson(Map<String, dynamic> json) => Weapon(
     id: json['id']?.toString() ?? '',
     name: json['name'] as String? ?? '',

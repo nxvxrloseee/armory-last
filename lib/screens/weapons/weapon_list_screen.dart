@@ -20,11 +20,6 @@ import '../../widgets/entity_table.dart';
 import '../../widgets/pagination_bar.dart';
 import '../../widgets/status_view.dart';
 
-/// Список оружия. Условия отбора (поиск/фильтры/сортировка/страница)
-/// приходят единственным источником правды — из адреса (см. router.dart,
-/// который парсит [WeaponQuery] из query-параметров). Экран не хранит их
-/// сам: любое изменение фильтра переходит по новому адресу через
-/// [context.go], а уже это перестроение приводит сюда новый [query].
 class WeaponListScreen extends StatefulWidget {
   const WeaponListScreen({super.key, required this.query});
 
@@ -76,8 +71,6 @@ class _WeaponListScreenState extends State<WeaponListScreen> {
   }
 
   Future<void> _loadReferences() async {
-    // Ссылки на репозитории берём до await: обращаться к context после
-    // асинхронного разрыва небезопасно, если виджет успеет размонтироваться.
     final manufacturerRepository = context.read<ManufacturerRepository>();
     final categoryRepository = context.read<CategoryRepository>();
     final designerRepository = context.read<DesignerRepository>();
@@ -318,9 +311,6 @@ class _WeaponListScreenState extends State<WeaponListScreen> {
             SizedBox(
               width: 190,
               child: DropdownButtonFormField<String?>(
-                // Ключ, зависящий от текущего значения, пересоздаёт поле при
-                // смене адреса (например, кнопкой «Сбросить» или «назад»
-                // браузера): initialValue применяется только при монтировании.
                 key: ValueKey('category-${query.categoryId}'),
                 initialValue: query.categoryId,
                 isExpanded: true,

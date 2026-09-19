@@ -36,12 +36,6 @@ Order _fromRecord(RecordModel r) {
   );
 }
 
-/// PocketBase (в отличие от armory_api) не даёт клиенту межколлекционных
-/// транзакций через REST — списание остатка при заказе делается отдельным
-/// запросом после создания заказа, не атомарно в одной транзакции с ним.
-/// При гонке двух одновременных заказов на последнюю единицу теоретически
-/// возможен уход остатка в 0 у обоих раньше, чем каждый успеет списать —
-/// осознанное упрощение платформы, задокументировано и в отчёте.
 class PbOrderRepository implements OrderRepository {
   PbOrderRepository(this._pb);
   final PocketBase _pb;
@@ -76,10 +70,6 @@ class PbOrderRepository implements OrderRepository {
         .collection('clients')
         .getFirstListItem(_pb.filter('user = {:u}', {'u': _pb.authStore.record?.id}));
 
-    // Предварительная (не единственная — сервер перепроверяет то же самое
-    // через createRule, см. pb_migrations) проверка лицензии — нужна только
-    // ради понятного сообщения об ошибке: сам PocketBase на отказе правила
-    // возвращает общий "Failed to create record." без деталей.
     final requiredTypes = (weapon.get<List<RecordModel>>('expand.categories', const []))
         .map((c) => c.get<String>('license_type', 'other'))
         .toSet();
@@ -97,7 +87,7 @@ class PbOrderRepository implements OrderRepository {
         expiresAt: DateTime.tryParse(licenseRecord.get<String>('expires_at', '')) ?? DateTime(1970),
       );
     } on ClientException {
-      license = null; // лицензии ещё нет — сообщение ниже это учитывает
+      license = null;
     }
     if (license == null) {
       throw const ConflictException(

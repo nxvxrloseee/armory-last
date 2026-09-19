@@ -1,13 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // HardwareKeyboard, KeyEvent
+import 'package:flutter/services.dart';
 
-/// Выход по неактивности (задание ПР5, оценка «5»): [timeout] без действий
-/// пользователя — выход, за [warnBefore] до этого — предупреждение.
-/// Клавиатуру слушаем глобально: KeyboardListener сообщал бы о нажатиях
-/// только пока его FocusNode в фокусе, а у обёртки над всем приложением
-/// фокуса нет — набор текста в форме не сбрасывал бы таймер.
 class InactivityWatcher extends StatefulWidget {
   const InactivityWatcher({
     super.key,
@@ -47,7 +42,6 @@ class _InactivityWatcherState extends State<InactivityWatcher> {
     if (widget.enabled != old.enabled) _restart();
   }
 
-  // false означает «событие не обработано, передайте его дальше».
   bool _onKey(KeyEvent event) {
     _restart();
     return false;
@@ -76,7 +70,6 @@ class _InactivityWatcherState extends State<InactivityWatcher> {
   @override
   Widget build(BuildContext context) {
     return Listener(
-      // Перехват без поглощения: событие идёт дальше к виджетам.
       behavior: HitTestBehavior.translucent,
       onPointerDown: (_) => _restart(),
       onPointerMove: (_) => _restart(),

@@ -7,9 +7,6 @@ import '../../repositories/client_repository.dart';
 import '../../utils/validators.dart';
 import '../../widgets/entity_form_scaffold.dart';
 
-/// Только редактирование телефона: ФИО/почта принадлежат связанному
-/// аккаунту `users` (не редактируются здесь), а сама запись `Client`
-/// появляется только через регистрацию — см. client_repository.dart.
 class ClientFormScreen extends StatefulWidget {
   const ClientFormScreen({super.key, required this.id});
 

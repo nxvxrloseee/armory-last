@@ -12,10 +12,6 @@ import 'package:armory_last/widgets/status_view.dart';
 
 import 'support/fake_auth.dart';
 
-/// ПР6, оценка «5»: не менее пяти тестов виджетов, покрывающих отображение
-/// состояния загрузки, пустого результата, ошибки с кнопкой повтора,
-/// срабатывание валидации формы и скрытие недоступного элемента при
-/// недостаточной роли.
 void main() {
   Widget wrap(Widget child) => MaterialApp(home: child);
 
@@ -102,8 +98,6 @@ void main() {
       await tester.tap(find.text('Войти'));
       await tester.pump();
 
-      // Оба поля пустые — форма не должна уйти в сеть, а должна показать
-      // ошибку валидации сразу под каждым полем.
       expect(find.text('Обязательное поле'), findsWidgets);
     });
   });
@@ -112,10 +106,6 @@ void main() {
     testWidgets('покупатель не видит "Администрирование" и "Покупатели"', (
       tester,
     ) async {
-      // testWidgets выполняет тело в зоне с фейковым временем — реальный
-      // Future от http-транспорта (даже с поддельным MockClient) не долетает
-      // до завершения сам по себе и виснет до тайм-аута фреймворка (10
-      // минут). tester.runAsync() на время прогоняет колбэк в настоящей зоне.
       final auth = (await tester.runAsync(() => loggedInAs('buyer')))!;
 
       await tester.pumpWidget(
@@ -130,10 +120,7 @@ void main() {
 
       expect(find.text('Администрирование'), findsNothing);
       expect(find.text('Покупатели'), findsNothing);
-      // Каталог виден всем ролям.
       expect(find.text('Оружие'), findsOneWidget);
-      // Реальная разница между ролями, а не декорация: у покупателя
-      // отдельная подпись на той же карточке заказов.
       expect(find.text('Мои заказы'), findsOneWidget);
     });
 
